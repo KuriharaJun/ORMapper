@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace MtrSclTs8DataMapper
+namespace MtrSclTs8
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    public class ClsMapAttribute : Attribute
+    public class DatabaseMapAttribute : Attribute
     {
         /// <summary>
         /// テーブル名
@@ -20,7 +20,7 @@ namespace MtrSclTs8DataMapper
         /// </summary>
         /// <param name="table">テーブル名</param>
         /// <param name="columns">カラム名</param>
-        public ClsMapAttribute(string table, string columns)
+        public DatabaseMapAttribute(string table, string columns)
         {
             this.Table = table;
             this.Columns = columns;
