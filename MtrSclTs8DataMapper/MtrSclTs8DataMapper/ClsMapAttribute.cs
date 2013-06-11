@@ -2,6 +2,11 @@
 
 namespace KORMapper
 {
+    /// <summary>
+    /// マッピング対象認識用属性
+    /// <para>設定対象：フィールド / プロパティ</para>
+    /// <para>複数設定：不可</para>
+    /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple=false)]
     public class DatabaseMapAttribute : Attribute
     {
