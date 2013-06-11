@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
+using System.Data.SqlClient;
 
 namespace KORMapper
 {
@@ -10,6 +11,37 @@ namespace KORMapper
     /// </summary>
     public class ClsDataMapper
     {
+        /// <summary>
+        /// O/Rマッピング連続実行処理
+        /// <para>Object → Database → Object</para>
+        /// </summary>
+        /// <typeparam name="T">パラメータオブジェクト型</typeparam>
+        /// <typeparam name="U">戻りデータ格納オブジェクト型</typeparam>
+        /// <param name="objectModel">パラメータデータ</param>
+        /// <param name="tableName">テーブル名</param>
+        /// <param name="command">SQLコマンド</param>
+        /// <param name="commandType">SQL種別</param>
+        /// <returns>SQL実行結果</returns>
+        public List<U> GetORMappingResult<T,U>(T objectModel, string tableName, SqlCommand command, EnSqlCommandType commandType) where T: new () where U : new()
+        {
+            DataTable dt = SetObjectToData<T>(objectModel, tableName, command, commandType);
+            var resultList = new List<U>();
+            switch (commandType)
+            {
+                case EnSqlCommandType.SELECT:
+                    {
+                        if (dt != null)
+                        {
+                            resultList = GetDataToObject<U>(dt);
+                        }
+                        break;
+                    }
+                default:
+                    break;
+            }
+
+            return resultList;
+        }
         /// <summary>
         /// Database → Objectマッピング処理
         /// </summary>
@@ -27,6 +59,24 @@ namespace KORMapper
         }
 
         /// <summary>
+        /// Obejct → Databaseマッピング処理
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="objectModel"></param>
+        /// <param name="command"></param>
+        /// <param name="con"></param>
+        /// <returns></returns>
+        public DataTable SetObjectToData<T>(T objectModel,string tableName, SqlCommand command, EnSqlCommandType commandType) where T : new()
+        {
+            Dictionary<string, List<string>> dataMapper = GetAttributeParam<T>();
+
+            // パラメータの設定
+            SetParam<T>(command, dataMapper, tableName, objectModel);
+            DataTable dt = CommandProc(command, tableName, commandType);
+            return dt;
+        }
+
+        /// <summary>
         /// 対象型のプロパティ・フィールド属性値をすべて取得
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -38,6 +88,46 @@ namespace KORMapper
 
             GetPropertyAttribute<T>(tableMapper, t);
             GetFieldAttribute<T>(tableMapper, t);
+
+            return tableMapper;
+        }
+
+        /// <summary>
+        /// 設定値の取得
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tableName"></param>
+        /// <param name="param"></param>
+        /// <param name="typeObject"></param>
+        /// <returns></returns>
+        private object GetValue<T>(string tableName, string param, T typeObject)
+        {
+            object value = null;
+
+            if (GetPropertyValue<T>(tableName, param, typeObject, out value) == true)
+            {
+                return value;
+            }
+            else if (GetFieldValue<T>(tableName, param, typeObject, out value) == true)
+            {
+                return value;
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// 対象型のプロパティ・フィールド属性値をすべて取得（パラメータ版）
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        private Dictionary<string, List<string>> GetAttributeParam<T>() where T : new()
+        {
+            T t = new T();
+            Dictionary<string, List<string>> tableMapper = new Dictionary<string, List<string>>();
+
+            GetPropertyAttributeParam<T>(tableMapper, t);
+            GetFieldAttributeParam<T>(tableMapper, t);
 
             return tableMapper;
         }
@@ -70,6 +160,67 @@ namespace KORMapper
                     tableMapper.Add(at.Table, entities);
                 }
             }
+        }
+
+        /// <summary>
+        /// プロパティの属性値をすべて取得（パラメータ）
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tableMapper"></param>
+        /// <param name="typeObject"></param>
+        private void GetPropertyAttributeParam<T>(Dictionary<string, List<string>> tableMapper, T typeObject)
+        {
+            PropertyInfo[] arPi = typeObject.GetType().GetProperties();
+            foreach (PropertyInfo pi in arPi)
+            {
+                DatabaseMapAttribute at = (DatabaseMapAttribute)Attribute.GetCustomAttribute(pi, typeof(DatabaseMapAttribute));
+
+                if (at != null)
+                {
+                    // 属性設定されている場合のみ処理
+                    if (tableMapper.ContainsKey(at.Table) == true && string.IsNullOrEmpty(at.Param) == false)
+                    {
+                        tableMapper[at.Table].Add(at.Param);
+                    }
+                    else if (string.IsNullOrEmpty(at.Param) == false)
+                    {
+                        var entities = new List<string>();
+                        entities.Add(at.Param);
+                        tableMapper.Add(at.Table, entities);
+                    }
+                }
+                
+            }
+        }
+
+        /// <summary>
+        /// プロパティから値を取得
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tableName"></param>
+        /// <param name="param"></param>
+        /// <param name="typeObject"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private bool GetPropertyValue<T>(string tableName, string param, T typeObject, out object value)
+        {
+            PropertyInfo[] arPi = typeObject.GetType().GetProperties();
+            foreach (PropertyInfo pi in arPi)
+            {
+                DatabaseMapAttribute at = (DatabaseMapAttribute)Attribute.GetCustomAttribute(pi, typeof(DatabaseMapAttribute));
+
+                if (at != null)
+                {
+                    // 属性設定されている場合のみ処理
+                    if (tableName == at.Table && param == at.Param)
+                    {
+                        value = pi.GetValue(typeObject, null);
+                        return true;
+                    }
+                }
+            }
+            value = null;
+            return false;
         }
 
         /// <summary>
@@ -192,6 +343,66 @@ namespace KORMapper
                     tableMapper.Add(at.Table, entities);
                 }
             }
+        }
+
+        /// <summary>
+        /// フィールドの属性値をすべて取得（パラメータ）
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tableMapper"></param>
+        /// <param name="typeObject"></param>
+        private void GetFieldAttributeParam<T>(Dictionary<string, List<string>> tableMapper, T typeObject)
+        {
+            FieldInfo[] arFi = typeObject.GetType().GetFields(BindingFlags.GetField);
+
+            foreach (FieldInfo fi in arFi)
+            {
+                DatabaseMapAttribute at = (DatabaseMapAttribute)Attribute.GetCustomAttribute(fi, typeof(DatabaseMapAttribute));
+
+                if (at != null)
+                {
+                    if (tableMapper.ContainsKey(at.Table) == true && string.IsNullOrEmpty(at.Param) == false)
+                    {
+                        tableMapper[at.Table].Add(at.Param);
+                    }
+                    else if (string.IsNullOrEmpty(at.Param) == false)
+                    {
+                        var entities = new List<string>();
+                        entities.Add(at.Param);
+                        tableMapper.Add(at.Table, entities);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// フィールドから値を取得
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tableName">テーブル名称</param>
+        /// <param name="param">パラメータ名</param>
+        /// <param name="typeObject">取得対象</param>
+        /// <param name="value">出力値</param>
+        /// <returns></returns>
+        private bool GetFieldValue<T>(string tableName, string param, T typeObject, out object value)
+        {
+            FieldInfo[] arFi = typeObject.GetType().GetFields();
+            foreach (FieldInfo fi in arFi)
+            {
+                DatabaseMapAttribute at = (DatabaseMapAttribute)Attribute.GetCustomAttribute(fi, typeof(DatabaseMapAttribute));
+
+                if (at != null)
+                {
+                    // 属性設定されている場合のみ処理
+                    if (tableName == at.Table && param == at.Param)
+                    {
+                        value = fi.GetValue(typeObject);
+                        return true;
+                    }
+                }
+            }
+            value = null;
+            return false;
         }
 
         /// <summary>
@@ -343,6 +554,54 @@ namespace KORMapper
 
                 return dataList;
             }
+        }
+
+        private void SetParam<T>(SqlCommand command, Dictionary<string, List<string>> tableMapper, string tableName, T typeObject)
+        {
+            if (tableMapper.ContainsKey(tableName) == false)
+            {
+                throw new NullReferenceException("該当するtableNameが存在しません。 : "+ tableName );
+            }
+
+            List<string> paramList = tableMapper[tableName];
+
+            foreach (string param in paramList)
+            {
+                command.Parameters[param].Value = GetValue<T>(tableName, param, typeObject);
+            }
+        }
+
+        /// <summary>
+        /// SQLコマンド実行処理
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="tableName"></param>
+        /// <param name="commandType"></param>
+        /// <returns></returns>
+        private DataTable CommandProc(SqlCommand command, string tableName, EnSqlCommandType commandType)
+        {
+            SqlDataAdapter da = new SqlDataAdapter(command);
+            DataTable dt = new DataTable(tableName);
+
+            switch (commandType)
+            {
+                case EnSqlCommandType.SELECT:
+                    {
+                        int rowCount = da.Fill(dt);
+                        break;
+                    }
+                case EnSqlCommandType.INSERT:
+                case EnSqlCommandType.UPDATE:
+                case EnSqlCommandType.DELETE:
+                    {
+                        da.UpdateCommand.ExecuteNonQuery();
+                        break;
+                    }
+                default:
+                    break;
+            }
+
+            return dt;
         }
 
         ///// <summary>

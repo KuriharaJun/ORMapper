@@ -21,6 +21,11 @@ namespace KORMapper
         public string Columns { set; get; }
 
         /// <summary>
+        /// パラメータ
+        /// </summary>
+        public string Param { set; get; }
+
+        /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="table">テーブル名</param>
@@ -29,6 +34,19 @@ namespace KORMapper
         {
             this.Table = table;
             this.Columns = columns;
+        }
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="table">テーブル名</param>
+        /// <param name="columns">カラム名</param>
+        /// <param name="param">パラメータ</param>
+        public DatabaseMapAttribute(string table, string columns, string param)
+        {
+            this.Table = table;
+            this.Columns = columns;
+            this.Param = param;
         }
     }
 }
