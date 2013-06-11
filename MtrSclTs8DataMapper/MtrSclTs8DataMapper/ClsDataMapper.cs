@@ -329,15 +329,15 @@ namespace KORMapper
                         foreach (string key in keyList)
                         {
                             object o = dr[key];
-                            if (SetPropertyValue<T>(key, o, model) == false)
+                            if (SetPropertyValue<T>(key, o, model) == true)
                             {
-                                if (SetFieldValue<T>(key, o, model) == false)
-                                {
-                                    // 無視
-                                }
+                                dataList.Add(model);
+                            }
+                            else if (SetFieldValue<T>(key, o, model) == true)
+                            {
+                                dataList.Add(model);
                             }
                         }
-                        dataList.Add(model);
                     }
                 }
 
