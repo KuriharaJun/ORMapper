@@ -2,7 +2,7 @@
 
 namespace KORMapper
 {
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple=false)]
     public class DatabaseMapAttribute : Attribute
     {
         /// <summary>
