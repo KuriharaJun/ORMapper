@@ -11,9 +11,9 @@ namespace KORMapper
         {
             Dictionary<string, List<string>> dataMapper = GetAttribute<T>();
 
-            Dictionary<string, Type> culumnType = GetCulumnType(da);
+            //Dictionary<string, Type> culumnType = GetCulumnType(da);
 
-            List<T> modelList = GetData<T>(da, dataMapper, culumnType);
+            List<T> modelList = GetData<T>(da, dataMapper);
             return modelList;
         }
 
@@ -281,7 +281,7 @@ namespace KORMapper
 
         }
 
-        private List<T> GetData<T>(DataTable da, Dictionary<string, List<string>> mapper, Dictionary<string, Type> culumnType) where T : new()
+        private List<T> GetData<T>(DataTable da, Dictionary<string, List<string>> mapper) where T : new()
         {
             var dataList = new List<T>();
             if (da == null)
@@ -320,14 +320,19 @@ namespace KORMapper
             }
         }
 
-        private Dictionary<string, Type> GetCulumnType(DataTable da)
-        {
-            var culumnType = new Dictionary<string, Type>();
-            for (int i = 0; i < da.Columns.Count; i++)
-            {
-                culumnType.Add(da.Columns[i].ColumnName, da.Columns[i].DataType);
-            }
-            return culumnType;
-        }
+        ///// <summary>
+        ///// カラム型取得
+        ///// </summary>
+        ///// <param name="da">データベースアクセス層</param>
+        ///// <returns></returns>
+        //private Dictionary<string, Type> GetCulumnType(DataTable da)
+        //{
+        //    var culumnType = new Dictionary<string, Type>();
+        //    for (int i = 0; i < da.Columns.Count; i++)
+        //    {
+        //        culumnType.Add(da.Columns[i].ColumnName, da.Columns[i].DataType);
+        //    }
+        //    return culumnType;
+        //}
     }
 }
