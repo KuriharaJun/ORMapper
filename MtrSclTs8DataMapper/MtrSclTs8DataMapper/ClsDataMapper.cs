@@ -5,8 +5,17 @@ using System.Reflection;
 
 namespace KORMapper
 {
+    /// <summary>
+    /// マッピング処理実行クラス
+    /// </summary>
     public class ClsDataMapper
     {
+        /// <summary>
+        /// Database → Objectマッピング処理
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="da">検索結果格納DataTable</param>
+        /// <returns></returns>
         public List<T> GetDataToObject<T>(DataTable da) where T : new ()
         {
             Dictionary<string, List<string>> dataMapper = GetAttribute<T>();
@@ -212,6 +221,14 @@ namespace KORMapper
             return false;
         }
 
+        /// <summary>
+        /// フィールドへの値設定（型変換実行）
+        /// </summary>
+        /// <typeparam name="T">対象型</typeparam>
+        /// <param name="fi">フィールド情報</param>
+        /// <param name="value">設定値</param>
+        /// <param name="typeObject">設定対象オブジェクト</param>
+        /// <param name="toType">変換型</param>
         private void SetField<T>(FieldInfo fi, object value, T typeObject, Type toType)
         {
             if (toType == typeof(bool))
@@ -281,6 +298,14 @@ namespace KORMapper
 
         }
 
+        /// <summary>
+        /// データアクセス層からデータを読み出し、格納型Listに設定する
+        /// </summary>
+        /// <typeparam name="T">格納型</typeparam>
+        /// <param name="da">データアクセス層</param>
+        /// <param name="mapper"></param>
+        /// <param name="culumnType"></param>
+        /// <returns></returns>
         private List<T> GetData<T>(DataTable da, Dictionary<string, List<string>> mapper) where T : new()
         {
             var dataList = new List<T>();
