@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MtrSclTs8
+namespace KORMapper
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public class DatabaseMapAttribute : Attribute

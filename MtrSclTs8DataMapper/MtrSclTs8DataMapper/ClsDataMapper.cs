@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
-namespace MtrSclTs8
+namespace KORMapper
 {
     public class ClsDataMapper
     {
