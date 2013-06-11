@@ -48,6 +48,7 @@
     <Compile Include="ClsConvertUtil.cs" />
     <Compile Include="ClsDataMapper.cs" />
     <Compile Include="ClsMapAttribute.cs" />
+    <Compile Include="EnSqlCommandType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
