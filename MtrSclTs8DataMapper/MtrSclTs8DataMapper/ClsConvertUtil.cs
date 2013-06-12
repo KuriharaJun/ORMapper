@@ -14,7 +14,6 @@ namespace KORMapper
             return Convert.ToBoolean(value);
         }
 
-
         public static byte ConvertByteValue(object value)
         {
             return Convert.ToByte(value);

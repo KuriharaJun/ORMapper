@@ -315,6 +315,37 @@ namespace KORMapper
             {
                 pi.SetValue(typeObject, ClsConvertUtil.ConvertUlongValue(value), null);
             }
+            else if (typeof(byte?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    pi.SetValue(typeObject, ClsConvertUtil.ConvertByteValue(value), null);
+                }
+            }
+            else if (typeof(short?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    pi.SetValue(typeObject, ClsConvertUtil.ConvertShortValue(value), null);
+                }
+                else pi.SetValue(typeObject, null, null);
+            }
+            else if (typeof(int?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    pi.SetValue(typeObject, ClsConvertUtil.ConvertIntValue(value), null);
+                }
+                else pi.SetValue(typeObject, null, null);
+            }
+            else if (typeof(long?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    pi.SetValue(typeObject, ClsConvertUtil.ConvertLongValue(value), null);
+                }
+                else pi.SetValue(typeObject, null, null);
+            }
 
         }
 
@@ -506,6 +537,38 @@ namespace KORMapper
             {
                 fi.SetValue(typeObject, ClsConvertUtil.ConvertUlongValue(value));
             }
+            else if (typeof(byte?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    fi.SetValue(typeObject, ClsConvertUtil.ConvertByteValue(value));
+                }
+                else fi.SetValue(typeObject, null);
+            }
+            else if (typeof(short?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    fi.SetValue(typeObject, ClsConvertUtil.ConvertShortValue(value));
+                }
+                else fi.SetValue(typeObject, null);
+            }
+            else if (typeof(int?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    fi.SetValue(typeObject, ClsConvertUtil.ConvertIntValue(value));
+                }
+                else fi.SetValue(typeObject, null);
+            }
+            else if (typeof(long?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    fi.SetValue(typeObject, ClsConvertUtil.ConvertLongValue(value));
+                }
+                else fi.SetValue(typeObject, null);
+            }
 
         }
 
@@ -525,7 +588,7 @@ namespace KORMapper
                 return dataList;
             }
             else
-            {                
+            {
                 if (mapper.ContainsKey(da.TableName) == false)
                 {
                     return dataList;
@@ -536,20 +599,21 @@ namespace KORMapper
                     foreach (DataRow dr in da.Rows)
                     {
                         T model = new T();
-                        
+
                         foreach (string key in keyList)
                         {
                             object o = dr[key];
-                            if (SetPropertyValue<T>(key, o, model) == true)
+                            if (SetPropertyValue<T>(key, o, model) == false)
                             {
-                                dataList.Add(model);
-                            }
-                            else if (SetFieldValue<T>(key, o, model) == true)
-                            {
-                                dataList.Add(model);
+                                if (SetFieldValue<T>(key, o, model) == false)
+                                {
+                                    // 無視
+                                }
                             }
                         }
+                        dataList.Add(model);
                     }
+
                 }
 
                 return dataList;
