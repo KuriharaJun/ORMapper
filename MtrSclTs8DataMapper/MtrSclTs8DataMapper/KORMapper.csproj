@@ -8,8 +8,8 @@
     <ProjectGuid>{F39E1F12-FB97-4132-AB0E-FCEAE769CED2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MtrSclTs8DataMapper</RootNamespace>
-    <AssemblyName>MtrSclTs8DataMapper</AssemblyName>
+    <RootNamespace>KORMapper</RootNamespace>
+    <AssemblyName>KORMapper</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="ClsConvertUtil.cs" />
     <Compile Include="ClsDataMapper.cs" />
-    <Compile Include="ClsMapAttribute.cs" />
+    <Compile Include="DatabaseMapAttribute.cs" />
     <Compile Include="EnSqlCommandType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
