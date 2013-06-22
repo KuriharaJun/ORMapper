@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KORMapper", "MtrSclTs8DataMapper\KORMapper.csproj", "{F39E1F12-FB97-4132-AB0E-FCEAE769CED2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KORMapper", "KORMapper\KORMapper.csproj", "{F39E1F12-FB97-4132-AB0E-FCEAE769CED2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{FBB179CB-EAD9-47E0-BC3B-C4E06B2BA726}"
 EndProject
