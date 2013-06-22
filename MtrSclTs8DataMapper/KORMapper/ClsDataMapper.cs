@@ -20,24 +20,40 @@ namespace KORMapper
         /// <param name="objectModel">パラメータデータ</param>
         /// <param name="tableName">テーブル名</param>
         /// <param name="command">SQLコマンド</param>
-        /// <param name="commandType">SQL種別</param>
         /// <returns>SQL実行結果</returns>
-        public List<U> GetORMappingResult<T,U>(T objectModel, string tableName, SqlCommand command, EnSqlCommandType commandType) where T: new () where U : new()
+        public List<U> GetORMappingResult<T, U>(T objectModel, string tableName, SqlCommand command)
+            where T : new()
+            where U : new()
         {
-            DataTable dt = SetObjectToData<T>(objectModel, tableName, command, commandType);
+            DataTable dt = SetObjectToData<T>(objectModel, tableName, command);
             var resultList = new List<U>();
-            switch (commandType)
+
+            if (dt != null)
             {
-                case EnSqlCommandType.SELECT:
-                    {
-                        if (dt != null)
-                        {
-                            resultList = GetDataToObject<U>(dt);
-                        }
-                        break;
-                    }
-                default:
-                    break;
+                resultList = GetDataToObject<U>(dt);
+            }
+
+            return resultList;
+        }
+
+        /// <summary>
+        /// O/Rマッピング連続実行処理
+        /// <para>Object → Database → Object</para>
+        /// <para>パラメータ設定なし</para>
+        /// </summary>
+        /// <typeparam name="U">戻りデータ格納オブジェクト型</typeparam>
+        /// <param name="tableName">テーブル名</param>
+        /// <param name="command">SQLコマンド</param>
+        /// <returns>SQL実行結果</returns>
+        public List<U> GetORMappingResult<U>(string tableName, SqlCommand command) where U : new ()
+        {
+            DataTable dt = SelectProc(command, tableName);
+
+            var resultList = new List<U>();
+
+            if (dt != null)
+            {
+                resultList = GetDataToObject<U>(dt);
             }
 
             return resultList;
@@ -66,13 +82,13 @@ namespace KORMapper
         /// <param name="command"></param>
         /// <param name="con"></param>
         /// <returns></returns>
-        public DataTable SetObjectToData<T>(T objectModel,string tableName, SqlCommand command, EnSqlCommandType commandType) where T : new()
+        public DataTable SetObjectToData<T>(T objectModel,string tableName, SqlCommand command) where T : new()
         {
             Dictionary<string, List<string>> dataMapper = GetAttributeParam<T>();
 
             // パラメータの設定
             SetParam<T>(command, dataMapper, tableName, objectModel);
-            DataTable dt = CommandProc(command, tableName, commandType);
+            DataTable dt = SelectProc(command, tableName);
             return dt;
         }
 
@@ -642,28 +658,12 @@ namespace KORMapper
         /// <param name="tableName"></param>
         /// <param name="commandType"></param>
         /// <returns></returns>
-        private DataTable CommandProc(SqlCommand command, string tableName, EnSqlCommandType commandType)
+        private DataTable SelectProc(SqlCommand command, string tableName)
         {
             SqlDataAdapter da = new SqlDataAdapter(command);
             DataTable dt = new DataTable(tableName);
 
-            switch (commandType)
-            {
-                case EnSqlCommandType.SELECT:
-                    {
-                        int rowCount = da.Fill(dt);
-                        break;
-                    }
-                case EnSqlCommandType.INSERT:
-                case EnSqlCommandType.UPDATE:
-                case EnSqlCommandType.DELETE:
-                    {
-                        da.UpdateCommand.ExecuteNonQuery();
-                        break;
-                    }
-                default:
-                    break;
-            }
+            int rowCount = da.Fill(dt);
 
             return dt;
         }
