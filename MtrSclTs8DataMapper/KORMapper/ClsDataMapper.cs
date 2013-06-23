@@ -272,7 +272,9 @@ namespace KORMapper
             if (toType == typeof(bool))
             {
                 pi.SetValue(typeObject, ClsConvertUtil.ConvertBoolValue(value),null);
-            } else if (toType == typeof(byte)) {
+            }
+            else if (toType == typeof(byte))
+            {
                 pi.SetValue(typeObject, ClsConvertUtil.ConvertByteValue(value), null);
             }
             else if (typeof(char) == toType)
@@ -313,7 +315,11 @@ namespace KORMapper
             }
             else if (typeof(string) == toType)
             {
-                pi.SetValue(typeObject, ClsConvertUtil.ConvertStringValue(value), null);
+                if (value != DBNull.Value)
+                {
+                    pi.SetValue(typeObject, ClsConvertUtil.ConvertStringValue(value), null);
+                }
+                else pi.SetValue(typeObject, null, null);
             }
             else if (typeof(TimeSpan) == toType)
             {
@@ -331,12 +337,53 @@ namespace KORMapper
             {
                 pi.SetValue(typeObject, ClsConvertUtil.ConvertUlongValue(value), null);
             }
+            else if (typeof(bool?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    pi.SetValue(typeObject, ClsConvertUtil.ConvertBoolValue(value), null);
+                }
+                else pi.SetValue(typeObject, null, null);
+            }
             else if (typeof(byte?) == toType)
             {
                 if (value != DBNull.Value)
                 {
                     pi.SetValue(typeObject, ClsConvertUtil.ConvertByteValue(value), null);
                 }
+                else pi.SetValue(typeObject, null, null);
+            }
+            else if (typeof(char?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    pi.SetValue(typeObject, ClsConvertUtil.ConvertCharValue(value), null);
+                }
+                else pi.SetValue(typeObject, null, null);
+            }
+            else if (typeof(DateTime?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    pi.SetValue(typeObject, ClsConvertUtil.ConvertDateTimeValue(value), null);
+                }
+                else pi.SetValue(typeObject, null, null);
+            }
+            else if (typeof(Decimal?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    pi.SetValue(typeObject, ClsConvertUtil.ConvertByteValue(value), null);
+                }
+                else pi.SetValue(typeObject, null, null);
+            }
+            else if (typeof(double?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    pi.SetValue(typeObject, ClsConvertUtil.ConvertDoubleValue(value), null);
+                }
+                else pi.SetValue(typeObject, null, null);
             }
             else if (typeof(short?) == toType)
             {
@@ -362,9 +409,55 @@ namespace KORMapper
                 }
                 else pi.SetValue(typeObject, null, null);
             }
-
+            else if (typeof(sbyte?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    pi.SetValue(typeObject, ClsConvertUtil.ConvertSbyteValue(value), null);
+                }
+                else pi.SetValue(typeObject, null, null);
+            }
+            else if (typeof(Single?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    pi.SetValue(typeObject, ClsConvertUtil.ConvertByteValue(value), null);
+                }
+                else pi.SetValue(typeObject, null, null);
+            }
+            else if (typeof(TimeSpan?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    pi.SetValue(typeObject, ClsConvertUtil.ConvertTimeSpanValue(value), null);
+                }
+                else pi.SetValue(typeObject, null, null);
+            }
+            else if (typeof(ushort?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    pi.SetValue(typeObject, ClsConvertUtil.ConvertUshortValue(value), null);
+                }
+                else pi.SetValue(typeObject, null, null);
+            }
+            else if (typeof(uint?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    pi.SetValue(typeObject, ClsConvertUtil.ConvertUintValue(value), null);
+                }
+                else pi.SetValue(typeObject, null, null);
+            }
+            else if (typeof(ulong?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    pi.SetValue(typeObject, ClsConvertUtil.ConvertUlongValue(value), null);
+                }
+                else pi.SetValue(typeObject, null, null);
+            }
         }
-
 
         /// <summary>
         /// フィールドの属性値をすべて取得
@@ -553,11 +646,27 @@ namespace KORMapper
             {
                 fi.SetValue(typeObject, ClsConvertUtil.ConvertUlongValue(value));
             }
+            else if (typeof(bool?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    fi.SetValue(typeObject, ClsConvertUtil.ConvertBoolValue(value));
+                }
+                else fi.SetValue(typeObject, null);
+            }
             else if (typeof(byte?) == toType)
             {
                 if (value != DBNull.Value)
                 {
                     fi.SetValue(typeObject, ClsConvertUtil.ConvertByteValue(value));
+                }
+                else fi.SetValue(typeObject, null);
+            }
+            else if (typeof(DateTime?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    fi.SetValue(typeObject, ClsConvertUtil.ConvertDateTimeValue(value));
                 }
                 else fi.SetValue(typeObject, null);
             }
@@ -582,6 +691,30 @@ namespace KORMapper
                 if (value != DBNull.Value)
                 {
                     fi.SetValue(typeObject, ClsConvertUtil.ConvertLongValue(value));
+                }
+                else fi.SetValue(typeObject, null);
+            }
+            else if (typeof(sbyte?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    fi.SetValue(typeObject, ClsConvertUtil.ConvertSbyteValue(value));
+                }
+                else fi.SetValue(typeObject, null);
+            }
+            else if (typeof(Single?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    fi.SetValue(typeObject, ClsConvertUtil.ConvertShortValue(value));
+                }
+                else fi.SetValue(typeObject, null);
+            }
+            else if (typeof(TimeSpan?) == toType)
+            {
+                if (value != DBNull.Value)
+                {
+                    fi.SetValue(typeObject, ClsConvertUtil.ConvertTimeSpanValue(value));
                 }
                 else fi.SetValue(typeObject, null);
             }
