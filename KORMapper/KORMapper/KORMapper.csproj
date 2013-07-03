@@ -38,7 +38,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractDbMapper.cs" />
     <Compile Include="ClsCommonModel.cs" />
+    <Compile Include="ConvertUtil.cs" />
     <Compile Include="DataMapperAttribute.cs" />
     <Compile Include="IDBMapper.cs" />
     <Compile Include="IDBMapperInsert.cs" />
