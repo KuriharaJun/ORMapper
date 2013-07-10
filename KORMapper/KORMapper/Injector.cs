@@ -5,6 +5,9 @@ using System.Text;
 
 namespace KORMapper
 {
+    /// <summary>
+    /// DIクラス
+    /// </summary>
     public class Injector
     {
         public Injector(Type bind)

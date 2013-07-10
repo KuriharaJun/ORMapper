@@ -6,6 +6,10 @@ using System.Text;
 
 namespace KORMapper
 {
+    /// <summary>
+    /// DBMapper共通クラス
+    /// <para>DBMapperは必ずこのクラスを継承すること</para>
+    /// </summary>
     public class AbstractDbMapper : IDBMapper
     {
         /// <summary>

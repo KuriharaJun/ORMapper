@@ -5,6 +5,9 @@ using System.Text;
 
 namespace KORMapper
 {
+    /// <summary>
+    /// 共通変換クラス
+    /// </summary>
     public class ConvertUtil
     {
         public static bool ConvertBoolValue(object value)
