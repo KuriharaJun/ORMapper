@@ -38,6 +38,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractBind.cs" />
     <Compile Include="AbstractDbMapper.cs" />
     <Compile Include="ClsCommonModel.cs" />
     <Compile Include="ConvertUtil.cs" />
@@ -47,6 +48,7 @@
     <Compile Include="IDBMapperSelect.cs" />
     <Compile Include="IDBMapperTran.cs" />
     <Compile Include="IDBMapperUpdate.cs" />
+    <Compile Include="InjectAttribute.cs" />
     <Compile Include="Injector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
