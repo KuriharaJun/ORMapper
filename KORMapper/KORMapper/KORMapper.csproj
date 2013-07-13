@@ -50,8 +50,13 @@
     <Compile Include="IDBMapperUpdate.cs" />
     <Compile Include="InjectAttribute.cs" />
     <Compile Include="Injector.cs" />
+    <Compile Include="MySQL\MySqlDbMapper.cs" />
+    <Compile Include="Oracle\OracleDbMapper.cs" />
+    <Compile Include="Postgresql\PgSqlDbMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlServer\SqlServerDbMapper.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
