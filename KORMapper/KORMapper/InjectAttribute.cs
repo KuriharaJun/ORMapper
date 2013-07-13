@@ -14,6 +14,7 @@ namespace KORMapper
     /// [Inject(Name = "injectName")]
     /// </code>
     /// </example>
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct,AllowMultiple=false,Inherited=true)]
     public class InjectAttribute : Attribute
     {
         /// <summary>
