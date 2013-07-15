@@ -171,7 +171,7 @@ namespace KORMapper
             /// </summary>
             /// <param name="param">パラメータ名</param>
             /// <param name="paramOrder">パラメータ順序</param>
-            public ParamStruct(string param, uint paramOrder)
+            public ParamStruct(string param, uint? paramOrder)
                 : this()
             {
                 this.Param = param;
@@ -186,7 +186,7 @@ namespace KORMapper
             /// <summary>
             /// パラメータ順序
             /// </summary>
-            public uint ParamOrder { get; private set; }
+            public uint? ParamOrder { get; private set; }
         }
         #endregion
     }

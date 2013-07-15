@@ -50,6 +50,6 @@ namespace KORMapper
         /// <summary>
         /// パラメータ順序
         /// </summary>
-        public uint ParamOrder { get; private set; }
+        public uint? ParamOrder { get; private set; }
     }
 }
