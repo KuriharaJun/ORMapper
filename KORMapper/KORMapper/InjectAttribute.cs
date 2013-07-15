@@ -22,14 +22,14 @@ namespace KORMapper
         /// </summary>
         public string Name { get; private set; }
 
-        /// <summary>
-        /// シングルトン
-        /// </summary>
-        public bool Singleton { get; set; }
+        ///// <summary>
+        ///// シングルトン
+        ///// </summary>
+        //public bool Singleton { get; set; }
 
-        /// <summary>
-        /// 実装
-        /// </summary>
-        public Type ToImple { get; set; }
+        ///// <summary>
+        ///// 実装
+        ///// </summary>
+        //public Type ToImple { get; set; }
     }
 }
